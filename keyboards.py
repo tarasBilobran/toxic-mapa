@@ -12,8 +12,10 @@ menu = InlineKeyboardMarkup(inline_keyboard=menu)
 # iexit_keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="◀️  Вийти в меню",
 #                                                                              callback_data="menu")]])
 
-report = [
-    # [InlineKeyboardButton(text="Відправити локацію", request_location=True), InlineKeyboardButton(text="Відправити фото")],
-    [InlineKeyboardButton(text="◀️ Вийти в меню", callback_data="generate_map")]
-]
-replay_report = InlineKeyboardMarkup(inline_keyboard=report)
+# report = [
+#     # [InlineKeyboardButton(text="Відправити локацію", request_location=True), InlineKeyboardButton(text="Відправити фото")],
+#     [InlineKeyboardButton(text="Відправити локацію", callback_data="share_location")],
+#     [InlineKeyboardButton(text="Відправити фото", callback_data="share_photo")],
+#     [InlineKeyboardButton(text="◀️ Вийти в меню")]
+# ]
+# replay_report = InlineKeyboardMarkup(inline_keyboard=report)

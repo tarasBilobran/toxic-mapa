@@ -36,9 +36,14 @@ async def an_incident_handler(callback: CallbackQuery):
     await callback.message.answer(text.an_incident)
 
 
+@router.callback_query(Text("describe_symptoms"))
+async def describe_poison_symptoms(callback: CallbackQuery):
+    await callback.message.answer(text.poison_symptoms)
+
+
 @router.callback_query(Text("contacts"))
 async def contacts_handler(callback: CallbackQuery):
-    await callback.message.answer(text.contacts)
+    await callback.message.answer("🏥 Список цілодобових клінік у Львові:\n" + "\n".join(text.contacts))
 
 
 @router.message(F.photo)

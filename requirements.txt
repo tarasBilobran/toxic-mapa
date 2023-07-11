@@ -1,4 +1,4 @@
-aiofiles==23.1.0
-aiogram==3.0.0b7
-pydantic==1.10.7
-python-dotenv==1.0.0
+aiofiles
+https://github.com/aiogram/aiogram/archive/refs/tags/v3.0.0b7.zip
+pydantic
+python-dotenv

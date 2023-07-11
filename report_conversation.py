@@ -3,6 +3,8 @@ import logging
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, MessageHandler, CallbackContext, ConversationHandler, filters
 
+from repository import IncidentReport
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -44,6 +46,7 @@ async def share_photos(update: Update, context: CallbackContext):
 async def share_location(update: Update, context: CallbackContext):
     # TODO: Accept location from TG bot
     user_location = update.message.location
+    incident_report = IncidentReport()
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="Геолокацію отримано",

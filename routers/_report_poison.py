@@ -1,34 +1,21 @@
 from typing import Dict, Any
 
-from aiogram import F, Router, Bot
-from aiogram.filters import Command, Text
+from aiogram import F, Router
+from aiogram.fsm import state
+from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 
-import keyboards
-import text
-from scene import LeaveReportScene
 from utils import is_valid_number
 
 router = Router()
 
 
-@router.message(Command("start"))
-async def start_handler(message: Message) -> None:
-    await message.answer(text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu)
-
-
-@router.message(F.text == "Меню")
-@router.message(F.text == "Вийти в меню")
-@router.message(F.text == "◀️ Вийти в меню")
-async def menu(message: Message) -> None:
-    await message.answer(text.menu, reply_markup=keyboards.menu)
-
-
-@router.callback_query(Text("generate_map"))
-async def map_handler(callback: CallbackQuery) -> None:
-    await callback.message.answer(text.maps_generation)
-    await callback.message.answer("Згенерована мапа")
+class LeaveReportScene(state.StatesGroup):
+    CONTACTS = state.State()
+    LOCATION = state.State()
+    PHOTOS = state.State()
+    NEUTRALIZED = state.State()
 
 
 @router.callback_query(Text("register_report"))
@@ -109,17 +96,3 @@ async def show_summary(message: Message, data: Dict[str, Any]) -> None:
            f"Знешкоджено - {neutralized}\n"
     await message.answer(text=text)
 
-
-@router.callback_query(Text("help_dog"))
-async def an_incident_handler(callback: CallbackQuery) -> None:
-    await callback.message.answer(text.an_incident)
-
-
-@router.callback_query(Text("describe_symptoms"))
-async def describe_poison_symptoms(callback: CallbackQuery) -> None:
-    await callback.message.answer(text.poison_symptoms)
-
-
-@router.callback_query(Text("contacts"))
-async def contacts_handler(callback: CallbackQuery) -> None:
-    await callback.message.answer("🏥 Список цілодобових клінік у Львові:\n" + "\n".join(text.contacts))

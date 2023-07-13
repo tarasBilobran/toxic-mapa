@@ -8,6 +8,7 @@ from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardB
 import keyboards
 import text
 from scene import LeaveReportScene
+from utils import is_valid_number
 
 router = Router()
 
@@ -38,6 +39,11 @@ async def leave_report_handler(callback: CallbackQuery, state: FSMContext) -> No
 
 @router.message(LeaveReportScene.CONTACTS, F.text)
 async def process_contacts(message: Message, state: FSMContext) -> None:
+    phone_number = message.text
+    if not is_valid_number(phone_number):
+        await message.answer("Ви ввели неправильний номер телефону. Спробуйте ще раз.")
+        return
+
     await state.update_data(name=message.from_user.full_name, username=message.from_user.username, phone=message.text)
     await state.set_state(LeaveReportScene.LOCATION)
     await message.answer("Натисніть поділитись", reply_markup=ReplyKeyboardMarkup(

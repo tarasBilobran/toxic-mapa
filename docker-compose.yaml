@@ -1,0 +1,13 @@
+version: "3.4"
+services:
+  toxic-mapa-db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    ports:
+      - 6666:5432
+    volumes:
+      - "./postgres-data:/var/lib/postgresql/data"

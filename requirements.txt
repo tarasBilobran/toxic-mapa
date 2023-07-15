@@ -2,3 +2,7 @@ aiofiles
 https://github.com/aiogram/aiogram/archive/refs/tags/v3.0.0b7.zip
 pydantic
 python-dotenv
+# Migrations
+alembic
+sqlalchemy
+psycopg2-binary

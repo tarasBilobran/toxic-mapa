@@ -17,14 +17,14 @@ class IncidentReport(pydantic.BaseModel):
     photos: typing.List
     # With UTC zone
     created_at: datetime.datetime
+    # Pending - when person needs to review this and approve if needed.
+    #   Reports in this state won't appear on the map
+    # Active - when person report was approved and should appear on the screen.
+    # Inactive - After some time report may become inactive.
+    status: str
 
 
 class IncidentReportRepository(typing.Protocol):
     async def save(self, *, report: IncidentReport):
         raise NotImplementedError()
 
-
-class JSONReportRepository(IncidentReportRepository):
-    async def save(self, *, report: IncidentReport):
-        async with aiofiles.open(DIR / f"{report.id}.json", "w") as file:
-            await file.write(report.model_dump_json(indent=4))

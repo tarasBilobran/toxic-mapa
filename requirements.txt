@@ -7,7 +7,11 @@ pydantic
 # .env support
 python-dotenv
 
+# Migrations
+alembic
+sqlalchemy
+psycopg2-binary
+
 # formating
 black
 isort
-pre-commit

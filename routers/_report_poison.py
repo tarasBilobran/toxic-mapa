@@ -1,14 +1,11 @@
-from typing import Any, Dict
+from typing import Dict, Any
 
 from aiogram import F, Router
-from aiogram.filters import Text
 from aiogram.fsm import state
+from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
-from aiogram.types import (CallbackQuery, InlineKeyboardButton,
-                           InlineKeyboardMarkup, KeyboardButton, Message,
-                           ReplyKeyboardMarkup, ReplyKeyboardRemove)
+from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
-from utils import is_valid_number
 
 router = Router()
 
@@ -23,34 +20,31 @@ class LeaveReportScene(state.StatesGroup):
 @router.callback_query(Text("register_report"))
 async def leave_report_handler(callback: CallbackQuery, state: FSMContext) -> None:
     await state.set_state(LeaveReportScene.CONTACTS)
-    await callback.message.answer("Будь ласка, напишіть свій номер телефону")
+    await callback.message.answer("Натисніть поділитись", reply_markup=ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="Поділитись контактом", request_contact=True),
+            ]
+        ], resize_keyboard=True, one_time_keyboard=True
+    ))
 
 
-@router.message(LeaveReportScene.CONTACTS, F.text)
+@router.message(LeaveReportScene.CONTACTS)
 async def process_contacts(message: Message, state: FSMContext) -> None:
-    phone_number = message.text
-    if not is_valid_number(phone_number):
-        await message.answer("Ви ввели неправильний номер телефону. Спробуйте ще раз.")
-        return
-
-    await state.update_data(
-        name=message.from_user.full_name,
-        username=message.from_user.username,
-        phone=message.text,
-    )
-    await state.set_state(LeaveReportScene.LOCATION)
     await message.answer(
-        "Натисніть поділитись",
-        reply_markup=ReplyKeyboardMarkup(
-            keyboard=[
-                [
-                    KeyboardButton(text="Поділитись локацією", request_location=True),
-                ]
-            ],
-            resize_keyboard=True,
-            one_time_keyboard=True,
-        ),
+        "Ми отримали контактні дані",
+        reply_markup=ReplyKeyboardRemove()
     )
+
+    await state.update_data(name=message.from_user.full_name, username=message.from_user.username, phone=message.contact.phone_number)
+    await state.set_state(LeaveReportScene.LOCATION)
+    await message.answer("Натисніть поділитись", reply_markup=ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="Поділитись локацією", request_location=True),
+            ]
+        ], resize_keyboard=True, one_time_keyboard=True
+    ))
 
 
 @router.message(LeaveReportScene.LOCATION, F.location)
@@ -99,12 +93,11 @@ async def show_summary(message: Message, data: Dict[str, Any]) -> None:
     photo = data["photo"]
     location = data["location"]
     neutralized = data["neutralized"]
-    text = (
-        f"Імя - {name}\n"
-        f"Юзернейм - {username}\n"
-        f"Телефон - {phone}\n"
-        f"Фото - {photo}\n"
-        f"Локація - {location}\n"
-        f"Знешкоджено - {neutralized}\n"
-    )
+    text = f"Імя - {name}\n" \
+           f"Юзернейм - {username}\n" \
+           f"Телефон - {phone}\n" \
+           f"Фото - {photo}\n" \
+           f"Локація - {location}\n" \
+           f"Знешкоджено - {neutralized}\n"
     await message.answer(text=text)
+

@@ -1,18 +1,12 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 from aiogram import F, Router
-from aiogram.fsm import state
 from aiogram.filters import Text
+from aiogram.fsm import state
 from aiogram.fsm.context import FSMContext
-from aiogram.types import (
-    Message,
-    CallbackQuery,
-    ReplyKeyboardMarkup,
-    KeyboardButton,
-    ReplyKeyboardRemove,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-)
+from aiogram.types import (CallbackQuery, InlineKeyboardButton,
+                           InlineKeyboardMarkup, KeyboardButton, Message,
+                           ReplyKeyboardMarkup, ReplyKeyboardRemove)
 
 from utils import is_valid_number
 

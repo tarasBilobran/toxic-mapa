@@ -1,12 +1,8 @@
 from aiogram import Router
 from aiogram.filters import Text
-from aiogram.types import (
-    CallbackQuery,
-    ReplyKeyboardMarkup,
-    KeyboardButton,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-)
+from aiogram.types import (CallbackQuery, InlineKeyboardButton,
+                           InlineKeyboardMarkup, KeyboardButton,
+                           ReplyKeyboardMarkup)
 
 import text
 

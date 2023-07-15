@@ -5,7 +5,8 @@ from aiogram.types import Message
 import keyboards
 import text
 
-from . import _map, _contacts, _report_poison, _my_dog_is_poisoned, _describe_symptoms
+from . import (_contacts, _describe_symptoms, _map, _my_dog_is_poisoned,
+               _report_poison)
 
 ROOT_ROUTER = Router()
 ROOT_ROUTER.include_routers(

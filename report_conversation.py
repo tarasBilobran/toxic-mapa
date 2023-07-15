@@ -1,13 +1,9 @@
 import logging
 
-from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import (
-    ContextTypes,
-    MessageHandler,
-    CallbackContext,
-    ConversationHandler,
-    filters,
-)
+from telegram import (KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove,
+                      Update)
+from telegram.ext import (CallbackContext, ContextTypes, ConversationHandler,
+                          MessageHandler, filters)
 
 from repository import IncidentReport
 

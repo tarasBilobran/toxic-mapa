@@ -6,7 +6,10 @@ import text
 
 router = Router()
 
+
 @router.callback_query(Text("contacts"))
 async def contacts_handler(callback: CallbackQuery) -> None:
-    await callback.message.answer("🏥 Список цілодобових клінік у Львові:\n" + "\n".join(text.contacts))
+    await callback.message.answer(
+        "🏥 Список цілодобових клінік у Львові:\n" + "\n".join(text.contacts)
+    )
     # TODO: Return to main menu?

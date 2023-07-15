@@ -28,4 +28,3 @@ class JSONReportRepository(IncidentReportRepository):
     async def save(self, *, report: IncidentReport):
         async with aiofiles.open(DIR / f"{report.id}.json", "w") as file:
             await file.write(report.model_dump_json(indent=4))
-

@@ -6,6 +6,7 @@ import text
 
 router = Router()
 
+
 @router.callback_query(Text("generate_map"))
 async def map_handler(callback: CallbackQuery) -> None:
     await callback.message.answer(text.maps_generation)

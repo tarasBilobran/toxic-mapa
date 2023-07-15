@@ -13,13 +13,15 @@ ROOT_ROUTER.include_routers(
     _contacts.router,
     _report_poison.router,
     _my_dog_is_poisoned.router,
-    _describe_symptoms.router
+    _describe_symptoms.router,
 )
 
 
 @ROOT_ROUTER.message(Command("start"))
 async def start_handler(message: Message) -> None:
-    await message.answer(text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu)
+    await message.answer(
+        text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu
+    )
 
 
 @ROOT_ROUTER.message(F.text == "Меню")

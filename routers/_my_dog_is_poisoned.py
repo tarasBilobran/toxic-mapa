@@ -1,6 +1,12 @@
 from aiogram import Router
 from aiogram.filters import Text
-from aiogram.types import CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    CallbackQuery,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+)
 
 import text
 
@@ -29,13 +35,19 @@ async def an_incident_handler(callback: CallbackQuery) -> None:
 
     label = "Ви можете повідомити про локацію отрути зараз або продовжути заповнювати форму."
     # TODO: fix this copy-paste
-    button = InlineKeyboardButton(text="✏️ Повідомити про локацію отрути.", callback_data="register_report")
+    button = InlineKeyboardButton(
+        text="✏️ Повідомити про локацію отрути.", callback_data="register_report"
+    )
     await callback.message.answer(
         label,
-        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [button],
-            [InlineKeyboardButton(text="Продовжити.", callback="ask_if_dog_is_fine")]
-        ])
+        reply_markup=InlineKeyboardMarkup(
+            inline_keyboard=[
+                [button],
+                [
+                    InlineKeyboardButton(
+                        text="Продовжити.", callback="ask_if_dog_is_fine"
+                    )
+                ],
+            ]
+        ),
     )
-
-

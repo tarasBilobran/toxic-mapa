@@ -4,7 +4,15 @@ from aiogram import F, Router
 from aiogram.fsm import state
 from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    Message,
+    CallbackQuery,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardRemove,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+)
 
 from utils import is_valid_number
 
@@ -31,15 +39,24 @@ async def process_contacts(message: Message, state: FSMContext) -> None:
         await message.answer("Ви ввели неправильний номер телефону. Спробуйте ще раз.")
         return
 
-    await state.update_data(name=message.from_user.full_name, username=message.from_user.username, phone=message.text)
+    await state.update_data(
+        name=message.from_user.full_name,
+        username=message.from_user.username,
+        phone=message.text,
+    )
     await state.set_state(LeaveReportScene.LOCATION)
-    await message.answer("Натисніть поділитись", reply_markup=ReplyKeyboardMarkup(
-        keyboard=[
-            [
-                KeyboardButton(text="Поділитись локацією", request_location=True),
-            ]
-        ], resize_keyboard=True, one_time_keyboard=True
-    ))
+    await message.answer(
+        "Натисніть поділитись",
+        reply_markup=ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text="Поділитись локацією", request_location=True),
+                ]
+            ],
+            resize_keyboard=True,
+            one_time_keyboard=True,
+        ),
+    )
 
 
 @router.message(LeaveReportScene.LOCATION, F.location)
@@ -88,11 +105,12 @@ async def show_summary(message: Message, data: Dict[str, Any]) -> None:
     photo = data["photo"]
     location = data["location"]
     neutralized = data["neutralized"]
-    text = f"Імя - {name}\n" \
-           f"Юзернейм - {username}\n" \
-           f"Телефон - {phone}\n" \
-           f"Фото - {photo}\n" \
-           f"Локація - {location}\n" \
-           f"Знешкоджено - {neutralized}\n"
+    text = (
+        f"Імя - {name}\n"
+        f"Юзернейм - {username}\n"
+        f"Телефон - {phone}\n"
+        f"Фото - {photo}\n"
+        f"Локація - {location}\n"
+        f"Знешкоджено - {neutralized}\n"
+    )
     await message.answer(text=text)
-

@@ -25,10 +25,9 @@ async def start_handler(message: Message) -> None:
         await message.answer(
             text.greet_admin.format(name=message.from_user.full_name), reply_markup=keyboards.admin_menu_keyboard
         )
-    else:
-        await message.answer(
-            text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu_keyboard
-        )
+    await message.answer(
+        text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu_keyboard
+    )
 
 
 @ROOT_ROUTER.message(F.text == "Меню")

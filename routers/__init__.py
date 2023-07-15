@@ -4,6 +4,7 @@ from aiogram.types import Message
 
 import keyboards
 import text
+from config import ADMINS
 
 from . import (_contacts, _describe_symptoms, _map, _my_dog_is_poisoned,
                _report_poison)
@@ -20,13 +21,18 @@ ROOT_ROUTER.include_routers(
 
 @ROOT_ROUTER.message(Command("start"))
 async def start_handler(message: Message) -> None:
-    await message.answer(
-        text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu
-    )
+    if message.from_user.id in ADMINS:
+        await message.answer(
+            text.greet_admin.format(name=message.from_user.full_name), reply_markup=keyboards.admin_menu_keyboard
+        )
+    else:
+        await message.answer(
+            text.greet.format(name=message.from_user.full_name), reply_markup=keyboards.menu_keyboard
+        )
 
 
 @ROOT_ROUTER.message(F.text == "Меню")
 @ROOT_ROUTER.message(F.text == "Вийти в меню")
 @ROOT_ROUTER.message(F.text == "◀️ Вийти в меню")
 async def menu(message: Message) -> None:
-    await message.answer(text.menu, reply_markup=keyboards.menu)
+    await message.answer(text.menu, reply_markup=keyboards.menu_keyboard)

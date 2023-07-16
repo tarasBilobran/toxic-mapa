@@ -1,3 +1,4 @@
+# TODO: This file is not used at the moment. Will be used for local development and production.
 version: "3.4"
 services:
   toxic-mapa-db:

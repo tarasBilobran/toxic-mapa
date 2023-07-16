@@ -38,7 +38,7 @@ async def process_contacts(message: Message, state: FSMContext) -> None:
 
     await state.update_data(name=message.from_user.full_name, username=message.from_user.username, phone=message.contact.phone_number)
     await state.set_state(LeaveReportScene.LOCATION)
-    await message.answer("Натисніть поділитись", reply_markup=ReplyKeyboardMarkup(
+    await message.answer("Поділіться локацією отрути", reply_markup=ReplyKeyboardMarkup(
         keyboard=[
             [
                 KeyboardButton(text="Поділитись локацією", request_location=True),

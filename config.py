@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from dotenv import load_dotenv
 
 import pydantic
@@ -25,3 +24,6 @@ config = Envs(_env_file=env_file)
 
 # TODO (TB): Example of docker-compose usage with .env files
 #   https://stackoverflow.com/questions/29377853/how-can-i-use-environment-variables-in-docker-compose
+
+# TODO Add your id for admin panel. Use https://t.me/getmyid_bot.
+ADMINS = [781766999, ]

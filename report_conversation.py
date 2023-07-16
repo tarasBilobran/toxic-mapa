@@ -1,13 +1,14 @@
 import logging
 
-from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import ContextTypes, MessageHandler, CallbackContext, ConversationHandler, filters
+from telegram import (KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove,
+                      Update)
+from telegram.ext import (CallbackContext, ContextTypes, ConversationHandler,
+                          MessageHandler, filters)
 
 from repository import IncidentReport
 
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
 SENDING_PHOTOS, SENDING_LOCATION = 0, 1
@@ -19,15 +20,20 @@ REPORT = "Повідомити про локацію отрути."
 
 async def report_incident(update: Update, context: CallbackContext):
     keyboard = [
-        [KeyboardButton(text=SHARE_LOCATION, request_location=True), KeyboardButton(text=SHARE_PHOTOS)],
-        [KeyboardButton(text="Назад")]
+        [
+            KeyboardButton(text=SHARE_LOCATION, request_location=True),
+            KeyboardButton(text=SHARE_PHOTOS),
+        ],
+        [KeyboardButton(text="Назад")],
     ]
-    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, resize_keyboard=True, one_time_keyboard=True
+    )
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="Ви можете поділитися фото та локацією.",
-        reply_markup=reply_markup
+        reply_markup=reply_markup,
     )
     logging.info(update.message)
     return 0
@@ -53,10 +59,7 @@ async def share_location(update: Update, context: CallbackContext):
     )
 
 
-REPORT_HANDLER = MessageHandler(
-    filters.Regex(f"^{REPORT}$"),
-    report_incident
-)
+REPORT_HANDLER = MessageHandler(filters.Regex(f"^{REPORT}$"), report_incident)
 
 
 async def done(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -72,14 +75,8 @@ REPORT_CONVERSATION = ConversationHandler(
     entry_points=[REPORT_HANDLER],
     states={
         0: [
-            MessageHandler(
-                filters.Regex(f"^{SHARE_LOCATION}$"),
-                share_location
-            ),
-            MessageHandler(
-                filters.Regex(f"^{SHARE_PHOTOS}$"),
-                share_photos
-            )
+            MessageHandler(filters.Regex(f"^{SHARE_LOCATION}$"), share_location),
+            MessageHandler(filters.Regex(f"^{SHARE_PHOTOS}$"), share_photos),
         ]
     },
     fallbacks=[MessageHandler(filters.Regex("^Назад$"), done)],

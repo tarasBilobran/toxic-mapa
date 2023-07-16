@@ -22,5 +22,5 @@ ask_dog_state_kb = InlineKeyboardMarkup(
     ]
 )
 # TODO Add callback for this button
-admin_menu_buttons = [[InlineKeyboardButton(text="🔎 Глянути репорти", callback_data="admin_reports_list"), ], ]
+admin_menu_buttons = [[InlineKeyboardButton(text="🔎 Глянути репорт", callback_data="admin_reports_list"), ], ]
 admin_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=admin_menu_buttons)

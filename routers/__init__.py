@@ -8,6 +8,7 @@ from config import ADMINS
 
 from . import (_contacts, _describe_symptoms, _map, _my_dog_is_poisoned,
                _report_poison)
+from .admin import _reports_list
 
 ROOT_ROUTER = Router()
 ROOT_ROUTER.include_routers(
@@ -16,6 +17,7 @@ ROOT_ROUTER.include_routers(
     _report_poison.router,
     _my_dog_is_poisoned.router,
     _describe_symptoms.router,
+    _reports_list.router
 )
 
 

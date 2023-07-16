@@ -106,3 +106,6 @@ poison_symptoms = """
 допомогу можуть надати ЛИШЕ у вет клініці
 """
 greet_admin = "Привіт, {name} що бажаєш глянути?"
+admin_report_accept = "Підтвердити"
+admin_report_reject = "Відхилити"
+admin_report_reject_and_block = "Відхилити та заблокувати користувача"

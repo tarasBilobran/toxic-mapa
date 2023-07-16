@@ -32,9 +32,8 @@ async def reports_list_handler(callback: CallbackQuery, state: FSMContext) -> No
                                   )
 
 
-@router.message(AdminReportState.DECISION)
+@router.message(AdminReportState.DECISION, F.text == text.admin_report_accept)
 # TODO Тут в мене є файний приклад як дока мені напиздюнькала і я проїбав +-2 години часу)
-@router.message(F.text.casefold() == text.admin_report_accept)
 async def process_report_accept(message: Message, state: FSMContext) -> None:
     # TODO Add to report status approved
     await message.answer(
@@ -42,8 +41,7 @@ async def process_report_accept(message: Message, state: FSMContext) -> None:
     )
 
 
-@router.message(AdminReportState.DECISION)
-@router.message(F.text.casefold() == text.admin_report_reject)
+@router.message(AdminReportState.DECISION, F.text == text.admin_report_reject)
 async def process_report_reject(message: Message, state: FSMContext) -> None:
     # TODO Add deleting report from database, or mark as reject
     await message.answer(
@@ -51,8 +49,7 @@ async def process_report_reject(message: Message, state: FSMContext) -> None:
     )
 
 
-@router.message(AdminReportState.DECISION)
-@router.message(F.text.casefold() == text.admin_report_reject_and_block)
+@router.message(AdminReportState.DECISION, F.text == text.admin_report_reject_and_block)
 async def process_report_reject_and_block(message: Message, state: FSMContext) -> None:
     # TODO Add deleting report from database or mark as reject, and block user.
     await message.answer(

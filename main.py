@@ -11,7 +11,7 @@ from routers import ROOT_ROUTER
 
 
 async def main():
-    bot = Bot(token=config.BOT_TOKEN, parse_mode=ParseMode.HTML)
+    bot = Bot(token=config.config.tg_api_key, parse_mode=ParseMode.HTML)
     await bot.set_my_commands(
         commands=[
             BotCommand(command="start", description="Головне меню.")

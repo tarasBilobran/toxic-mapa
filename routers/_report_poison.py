@@ -82,10 +82,10 @@ async def process_neutralized(message: Message, state: FSMContext) -> None:
         "Чудово, зберігаю ваш репорт",
         reply_markup=ReplyKeyboardRemove(),
     )
-    await show_summary(message=message, data=data)
+    await save_report(message=message, data=data)
 
 
-async def show_summary(message: Message, data: Dict[str, Any]) -> None:
+async def save_report(message: Message, data: Dict[str, Any]) -> None:
     print(data)
     name = data["name"]
     username = data["username"]

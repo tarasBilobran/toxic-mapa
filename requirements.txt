@@ -2,6 +2,12 @@ aiofiles
 https://github.com/aiogram/aiogram/archive/refs/tags/v3.0.0b7.zip
 pydantic
 python-dotenv
+# Async connection to db
+asyncpg
+# Testing
+pytest
+pytest-asyncio
+docker
 # Migrations
 alembic
 sqlalchemy

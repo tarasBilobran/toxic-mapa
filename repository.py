@@ -3,7 +3,7 @@ import typing
 import uuid
 from pathlib import Path
 
-import aiofiles
+import asyncpg
 import pydantic
 
 DIR = Path(__file__).parent / "tmp"
@@ -14,7 +14,7 @@ class IncidentReport(pydantic.BaseModel):
     reported_by: str
     # WKT location
     location: str
-    photos: typing.List
+    photos: typing.List[str]
     # With UTC zone
     created_at: datetime.datetime
     # Pending - when person needs to review this and approve if needed.
@@ -28,3 +28,15 @@ class IncidentReportRepository(typing.Protocol):
     async def save(self, *, report: IncidentReport):
         raise NotImplementedError()
 
+
+class AsyncPgIncidentReportRepository(IncidentReportRepository):
+    def __init__(self, conn: asyncpg.Connection):
+        self._conn = conn
+
+    async def save(self, *, report: IncidentReport):
+        # TODO: Add proper implementation.
+        await self._conn.execute(
+            """
+            select 1;
+            """
+        )

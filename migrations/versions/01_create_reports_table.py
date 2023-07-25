@@ -27,8 +27,9 @@ def upgrade() -> None:
         -- path on the local file system to files
         photos TEXT[] NOT NULL,
         status TEXT NOT NULL,
-        created_at TIMESTAMPTZ,
-        updated_at TIMESTAMPTZ
+        poison_removed BOOL NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL,
+        updated_at TIMESTAMPTZ NOT NULL 
     );
     """)
     # ### end Alembic commands ###

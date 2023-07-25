@@ -9,8 +9,8 @@ import asyncpg
 import alembic.command
 import alembic.config
 
-from config import config
-
+from app_context import default_app_context
+from config import DBConfig
 
 pytest_plugins = ('pytest_asyncio',)
 
@@ -18,11 +18,19 @@ pytest_plugins = ('pytest_asyncio',)
 @pytest.fixture
 def db_config():
     # overwrite default configuration to connect to test db
-    return config.db.copy(update={
-        "host": "127.0.0.1",
-        "db": "test",
-        "port": "6666"
-    })
+    return DBConfig(
+        host="127.0.0.1",
+        db="test",
+        user="postgres",
+        password="password",
+        port="6666",
+    )
+
+
+@pytest.fixture(autouse=True)
+async def app_context():
+    async with default_app_context() as context:
+        yield context
 
 
 @pytest.fixture

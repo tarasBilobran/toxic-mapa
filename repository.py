@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import enum
 import typing
@@ -33,13 +35,43 @@ class IncidentReport(pydantic.BaseModel):
 
 
 class IncidentReportRepository(typing.Protocol):
+    async def get_pending_reports_count(self) -> int:
+        raise NotImplementedError
+
+    async def get_pending_report(self) -> IncidentReport | None:
+        raise NotImplementedError
+
     async def save(self, *, report: IncidentReport):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class AsyncPgIncidentReportRepository(IncidentReportRepository):
     def __init__(self, conn: asyncpg.Connection):
         self._conn = conn
+
+    async def get_pending_reports_count(self) -> int:
+        return await self._conn.fetchval(
+            """
+            SELECT COUNT(*)
+            FROM public.poison_report
+            WHERE status = $1;
+            """,
+            ReportStatus.PENDING
+        )
+
+    async def get_pending_report(self) -> IncidentReport | None:
+        row = await self._conn.fetchrow(
+            """
+            SELECT *
+            FROM public.poison_report
+            WHERE status = $1
+            ORDER BY updated_at
+            LIMIT 1;
+            """,
+            ReportStatus.PENDING
+        )
+        if row is not None:
+            return IncidentReport.parse_obj(row)
 
     async def save(self, *, report: IncidentReport):
         await self._conn.execute(

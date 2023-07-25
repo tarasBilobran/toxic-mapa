@@ -17,13 +17,8 @@ class DBConfig(pydantic.BaseSettings):
 class Envs(pydantic.BaseSettings):
     tg_api_key: str
     db: DBConfig
-
-
-env_file = Path(__file__).parent / ".env"
-config = Envs(_env_file=env_file)
+    # TODO Add your id for admin panel. Use https://t.me/getmyid_bot.
+    admins: list[int] = pydantic.Field(default_factory=lambda : [781766999, 339833320])
 
 # TODO (TB): Example of docker-compose usage with .env files
 #   https://stackoverflow.com/questions/29377853/how-can-i-use-environment-variables-in-docker-compose
-
-# TODO Add your id for admin panel. Use https://t.me/getmyid_bot.
-ADMINS = [781766999, ]

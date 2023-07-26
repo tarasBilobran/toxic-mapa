@@ -18,11 +18,11 @@ class ReportsResponse(APIModel):
 
 @api.get("get_status/", response_model=HealthResponse)
 async def check_health():
-    return {"ok": True}
+    return HealthResponse(status=True)
 
 
 @api.get("get_reports_locations/", response_model=ReportsResponse)
-async def get_reports_locations(session: Session):
+async def get_reports_locations(session: SomeSession):
     # TODO Update Session to real
     locations = session.query(IncidentReport).filter(IncidentReport.status == ReportStatus.ACTIVE).all()
-    return {"locations": locations}
+    return ReportsResponse(locations=locations)

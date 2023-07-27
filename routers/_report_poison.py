@@ -125,6 +125,7 @@ async def process_neutralized(message: Message, state: FSMContext, bot: Bot) -> 
     app_context = get_app_context()
     "/opt/app/toxic-map/<report_uuid>/int"
     for photo in data["photos"]:
+        # TODO: Actually download file to local filesystem.
         await bot.download(photo.file_id, '')
 
     location = Point(data["location"].longitude, data['location'].latitude)

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import contextlib
+import typing
 from pathlib import Path
 
 import asyncpg
 
 from config import Envs
-from repository import AsyncPgIncidentReportRepository
+from repositories import AsyncPgIncidentReportRepository, AsyncPgIncidentUserRepository
 
 _APP_CONTEXT: "AppContext" | None = None
 
@@ -50,3 +51,9 @@ class AppContext:
         async with self.db_pool() as pool:
             async with pool.acquire() as conn:
                 yield AsyncPgIncidentReportRepository(conn=conn)
+
+    @contextlib.asynccontextmanager
+    async def user_repository(self) -> typing.AsyncGenerator[AsyncPgIncidentUserRepository, None]:
+        async with self.db_pool() as pool:
+            async with pool.acquire() as conn:
+                yield AsyncPgIncidentUserRepository(conn=conn)

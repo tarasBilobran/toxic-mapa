@@ -5,6 +5,7 @@ from aiogram.types import Message
 import keyboards
 import text
 from app_context import get_app_context
+from repositories import UserStatus
 
 from . import (_contacts, _describe_symptoms, _map, _my_dog_is_poisoned,
                _report_poison)
@@ -24,8 +25,13 @@ ROOT_ROUTER.include_routers(
 @ROOT_ROUTER.message(Command("start"))
 async def start_handler(message: Message) -> None:
     context = get_app_context()
+    async with context.user_repository() as repo:
+        user = await repo.get_by_telegram_id(tg_id=message.from_user.id)
 
-    if message.from_user.id in context.get_config().admins:
+    if user is not None and user.status == UserStatus.BLOCKED:
+        await message.answer("Ви заблоковані.")
+
+    if user is not None and user.status == UserStatus.ADMIN:
         async with context.report_repository() as repo:
             reports_count = await repo.get_pending_reports_count()
 

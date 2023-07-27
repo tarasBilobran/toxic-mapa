@@ -3,7 +3,8 @@ from datetime import datetime, timezone
 
 import pytest
 
-from repository import AsyncPgIncidentReportRepository, IncidentReport, ReportStatus
+from repositories import ReportStatus, IncidentReport, AsyncPgIncidentReportRepository
+
 
 def _report():
     return IncidentReport(
@@ -28,6 +29,16 @@ class TestSaveMethod:
 
         await repo.save(report=report)
 
+        actual_rows = await db_conn.fetch("SELECT * FROM public.poison_report;")
+        assert len(actual_rows) == 1
+        assert IncidentReport.parse_obj(actual_rows[0]) == report
+
+    async def test_save_for_existing_report_updates_status(self, db_conn, repo):
+        report = _report()
+        await repo.save(report=report)
+
+        report.status = ReportStatus.ACTIVE
+        await repo.save(report=report)
         actual_rows = await db_conn.fetch("SELECT * FROM public.poison_report;")
         assert len(actual_rows) == 1
         assert IncidentReport.parse_obj(actual_rows[0]) == report

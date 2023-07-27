@@ -18,3 +18,6 @@ psycopg2-binary
 # formating
 black
 isort
+# API
+fastapi
+fastapi_utils

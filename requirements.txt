@@ -20,4 +20,4 @@ black
 isort
 # API
 fastapi
-fastapi_utils
+uvicorn

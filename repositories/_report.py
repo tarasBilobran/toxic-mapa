@@ -4,12 +4,9 @@ import datetime
 import enum
 import typing
 import uuid
-from pathlib import Path
 
 import asyncpg
 import pydantic
-
-DIR = Path(__file__).parent / "tmp"
 
 
 class ReportStatus(str, enum.Enum):
@@ -17,13 +14,11 @@ class ReportStatus(str, enum.Enum):
     PENDING = "pending"
     # when person report was approved and should appear on the screen.
     ACTIVE = "active"
-    # After some time report may become inactive.
-    INACTIVE = "inactive"
 
 
 class IncidentReport(pydantic.BaseModel):
     id: uuid.UUID
-    reported_by: str
+    reported_by: uuid.UUID
     # WKT location
     location: str
     photos: typing.List[str]
@@ -34,20 +29,20 @@ class IncidentReport(pydantic.BaseModel):
     poison_removed: bool
 
 
-class IncidentReportRepository(typing.Protocol):
-    async def get_pending_reports_count(self) -> int:
-        raise NotImplementedError
-
-    async def get_pending_report(self) -> IncidentReport | None:
-        raise NotImplementedError
-
-    async def save(self, *, report: IncidentReport):
-        raise NotImplementedError
-
-
-class AsyncPgIncidentReportRepository(IncidentReportRepository):
+class AsyncPgIncidentReportRepository:
     def __init__(self, conn: asyncpg.Connection):
         self._conn = conn
+
+    async def count_pending_reports_for_user(self, *, requested_by: uuid.UUID) -> int:
+        return await self._conn.fetchval(
+            """
+            SELECT COUNT(*)
+            FROM public.poison_report
+            WHERE status = $1 AND requested_by = $2;
+            """,
+            ReportStatus.PENDING,
+            requested_by
+        )
 
     async def get_pending_reports_count(self) -> int:
         return await self._conn.fetchval(
@@ -86,7 +81,12 @@ class AsyncPgIncidentReportRepository(IncidentReportRepository):
                 $6,
                 $7,
                 $8
-            );
+            )
+            ON CONFLICT (id)
+            DO UPDATE SET
+                status = $5,
+                updated_at = $8;
+            ;
             """,
             report.id,
             report.reported_by,
@@ -96,4 +96,22 @@ class AsyncPgIncidentReportRepository(IncidentReportRepository):
             report.poison_removed,
             report.created_at,
             report.updated_at
+        )
+
+    async def delete_by_id(self, *, id: uuid.UUID) -> None:
+        await self._conn.execute(
+            """
+            DELETE FROM public.poison_report           
+            WHERE id = $1;
+            """,
+            id
+        )
+
+    async def delete_by_reported_by(self, *, reported_by: uuid.UUID) -> None:
+        await self._conn.execute(
+            """
+            DELETE FROM public.poison_report           
+            WHERE reported_by = $1;
+            """,
+            reported_by
         )
